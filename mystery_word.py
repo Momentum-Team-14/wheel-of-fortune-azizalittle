@@ -1,31 +1,24 @@
 import random
 
-
 wrong_letters = []
 right_letters = []
-
-with open('test-word.txt', 'r') as reader:
-# read the file that is passed in
-    contents = reader.read()
-# create a list of the words
-    word_list = contents.split()
-#choose a random word in the list
-    magic_word = random.choice(word_list)
-    print(magic_word)
-    # create a list of letters of magic_word
-    magic_list = list(magic_word)
-    print(magic_list)
-
+magic_word = ''
 remaining_guesses = 8
-
-def play_game(magic_list):
-        print(f"The magic word is {len(magic_list)} letters long.")
-        print_board(magic_list, right_letters)
-        guess_word(magic_list, remaining_guesses, wrong_letters, right_letters)
-
-    # for letter of letter in letters, if input == letter, print CORRECT and display the letter
-
 underscore = "_  "
+
+def print_board(magic_word, right_letters):
+    """Print right letters and empty spaces
+    
+        This function takes two variables, the word to be guessed and the list of correct 
+        letters guessed and returns a display of the correct letters and underscores for the remaining letters"""
+    output = ""
+    for letter in magic_word:
+        if letter in right_letters:
+            output += letter
+        else:
+            output += "_ "
+    return(output)
+
 
 def guess_word(magic_list, remaining_guesses, wrong_letters, right_letters):
     """"""
@@ -75,23 +68,36 @@ def guess_word(magic_list, remaining_guesses, wrong_letters, right_letters):
                         print(f"You have {remaining_guesses} guesses left\n")
                 if "_" not in board:
                     print("You won! Good job")
-                    return 
 
 
 
-def print_board(magic_word, right_letters):
-    """Print right letters and empty spaces
-    
-        This function takes two variables, the word to be guessed and the list of correct 
-        letters guessed and returns a display of the correct letters and underscores for the remaining letters"""
-    output = ""
-    for letter in magic_word:
-        if letter in right_letters:
-            output += letter
-        else:
-            output += "_ "
-    # print(output)
-    return(output)
+def play_game(magic_list):
+        print(f"The magic word is {len(magic_list)} letters long.")
+        guess_word(magic_list, remaining_guesses, wrong_letters, right_letters)
+
+
+def choose_level(word_list):
+    easy_words = [word for word in word_list if len(word) <= 6]
+    normal_words = [word for word in word_list if 6 >= len(word) <= 8]
+    hard_words = [word for word in word_list if len(word) > 8]
+    level = input('Choose a level of difficulty: easy, normal or hard: ')
+    if level == 'easy':
+        magic_word = random.choice(easy_words)
+    elif level == 'normal':
+        magic_word = random.choice(normal_words)
+    else:
+        magic_word = random.choice(hard_words)
+    print(magic_word)
+    # create a list of letters of magic_word
+    magic_list = list(magic_word)
+    play_game(magic_list)
+
+with open('words.txt', 'r') as reader:
+# read the file that is passed in
+    contents = reader.read()
+# create a list of the words
+    word_list = contents.split()
+    choose_level(word_list)
 
 
 #do not touch
